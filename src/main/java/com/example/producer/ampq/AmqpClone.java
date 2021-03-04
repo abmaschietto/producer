@@ -9,21 +9,21 @@ import org.springframework.stereotype.Component;
 import com.example.producer.dto.MessageDto;
 
 @Component
-public class AmqpProducer implements IAmqpSender<MessageDto>{
-	
+public class AmqpClone implements IAmqpSender<MessageDto> {
+
+	@Value("${spring.rabbitmq.request.routing-key.producerclone}")
+	private String routingKey;
+
+	@Value("${spring.rabbitmq.request.exchenge.producerclone}")
+	private String exchange;
+
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-	
-	@Value("${spring.rabbitmq.request.routing-key.producer}")
-	private String queue;
-	
-	@Value("${spring.rabbitmq.request.exchenge.producer}")
-	private String exchange;
 
 	@Override
 	public void producer(MessageDto message) {
 		try {
-			rabbitTemplate.convertAndSend(exchange, queue, message);
+			rabbitTemplate.convertAndSend(exchange, routingKey, message);
 		} catch (Exception e) {
 			throw new AmqpRejectAndDontRequeueException(e);
 		}

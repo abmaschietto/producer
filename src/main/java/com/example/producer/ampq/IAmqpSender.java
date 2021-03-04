@@ -1,6 +1,6 @@
 package com.example.producer.ampq;
 
-public interface IAmqpProducer<T>{
+public interface IAmqpSender<T>{
 
 	void producer(T t);
 }
